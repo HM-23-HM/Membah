@@ -1,0 +1,94 @@
+import { ADD_ROOT_FOLDER } from 'C:/Users/Hodeem/Documents/Mobile and Web Development Projects/react-native/Membah/actions.js'
+import { ADD_SUB_FOLDER } from 'C:/Users/Hodeem/Documents/Mobile and Web Development Projects/react-native/Membah/actions.js'
+import { ADD_TASK } from 'C:/Users/Hodeem/Documents/Mobile and Web Development Projects/react-native/Membah/actions.js'
+import { ModifiedGraph } from './Graph.js'
+
+// const initialState = { 
+    
+//     rootFolders: [
+//         {   Name: 'Vehicle',
+//         Tasks: [{Name: 'Vehicle', Title: 'Task1'}, 
+//                 {Name: 'Vehicle', Title: 'Task2'}]  },
+
+//         {   Name: 'Property',
+//         Tasks: [{Name: 'Property', Title: 'Task3'},
+//                 {Name: 'Property', Title: 'Task4'}]  },
+
+//         {   Name: 'Business',
+//         Tasks: [{Name: 'Business', Title: 'Task5'},
+//                 {Name: 'Business', Title: 'Task6'}]  },  
+//     ]
+// }
+
+var vertices = [
+    {Type: 'Root', Title: 'RootVertex'},
+
+    {Type: 'rootFolder', Parent: 'RootVertex', Title: 'Vehicle'},
+    {Type: 'rootFolder', Parent: 'RootVertex', Title: 'Property'},
+    {Type: 'rootFolder', Parent: 'RootVertex', Title: 'Business'},
+
+    {Type: 'subFolder', Parent: 'Vehicle', Title: 'Maintenance'},
+    {Type: 'subFolder', Parent: 'Property', Title: 'Pool'},
+
+    {Type: 'Task', Parent:'Vehicle', Title: 'Task1'},     
+    {Type: 'Task', Parent:'Property', Title: 'Task1'},     
+    {Type: 'Task', Parent:'Business', Title: 'Task1'},     
+    
+]
+
+initialGraph = new ModifiedGraph()
+
+for (var i = 0; i < vertices.length; i++) {
+    var checkTypeOfVertex = vertices[i].Type
+    if (checkTypeOfVertex != 'Task') {
+        initialGraph.addVertex(vertices[i]);
+    } else {
+        initialGraph.addTask(vertices[i])
+    }
+}
+
+for (var i = 0; i < vertices.length; i++) {
+    initialGraph.addEdgeWithoutDirectParentReference(vertices[i]);
+}
+
+
+var indexOfsubFolder;
+var subFolder;
+
+const folderReducer = (state = initialState, action) => {
+    switch(action.type) {
+        case ADD_ROOT_FOLDER:
+            //console.log("Inside the reducer")
+            return {
+                
+                rootFolders: [...state.rootFolders, action.folder]
+            }
+        case ADD_TASK:
+            subFolder = state.rootFolders.find((element) => element.Name == action.task.Name)
+            //console.log("This is subFolder", subFolder)
+            indexOfsubFolder = state.rootFolders.indexOf(subFolder)
+            subFolder.Tasks.push(action.task)
+            if (indexOfsubFolder == 0) {
+                return {
+                    rootFolders: [subFolder, ...state.rootFolders.slice(1)]
+                } 
+            } else {
+                return {
+                    rootFolders: [
+                        ...state.rootFolders.slice(0,indexOfsubFolder),
+                        subFolder,
+                        ...state.rootFolders.slice(indexOfsubFolder + 1)
+                    ]
+                }
+            }
+        case ADD_SUB_FOLDER:
+            return {
+                
+            }
+            
+        default:
+            return state
+    }
+}
+
+export default folderReducer

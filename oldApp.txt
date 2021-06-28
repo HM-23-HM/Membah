@@ -1,0 +1,40 @@
+// const [homeArray, setHomeArray] = useState([
+  //   {Name: 'Vehicle',
+  //   Tasks: [{Name: 'Task1'},{Name: 'Task2'}]  },
+  //   {Name: 'Property',
+  //   Tasks: [{Name: 'Task3'},{Name: 'Task4'}]  },
+  //   {Name: 'Business',
+  //   Tasks: [{Name: 'Task5'},{Name: 'Task6'}]  },  
+  // ])
+
+  // const [newFolder, setNewFolder] = useState(
+  //   {Name: '', 
+  //   Tasks: []
+  // })
+
+  // const addFolderToHome = () => {
+  //     setHomeArray([...homeArray, newFolder]);
+  // }
+
+
+  //   return (
+  //     <View style={styles.container}>
+  //       <ScrollView contentContainerStyle={styles.container}>
+  //         {   homeArray.map((el) => (
+  //         <TouchableOpacity style={styles.folder}>
+  //           <Text key={el.Name} style={styles.folderText}>{el.Name}</Text>
+  //         </TouchableOpacity>))    }
+  //       </ScrollView>
+  //       <TextInput 
+  //         placeholder='Enter new folder name here'
+  //         onChangeText={(text) =>
+  //           setNewFolder({Name: text})}
+  //         />
+  //       <Button
+  //         onPress={() => addFolderToHome()}
+  //         title='Add new folder'/>
+  //       <StatusBar style="auto" />
+
+  //     </View>
+  //   )
+  // }
