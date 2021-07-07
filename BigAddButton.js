@@ -56,7 +56,8 @@ const BigAddButton = (props) => {
             Alert.alert("Title of new folder is blank")
         } else {
             props.dispatchAddRootFolderVertex(newRootFolder)
-            console.log("@BigAddButton -- Root Folders are", rootFolders)
+            // console.log("@BigAddButton -- New root folder is ", newRootFolder)
+            // console.log("@BigAddButton -- Root Folders are", rootFolders)
             setNewRootFolder(blankRootFolder)
         }
     }
