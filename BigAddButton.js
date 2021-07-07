@@ -31,7 +31,6 @@ const BigAddButton = (props) => {
 
 
     const { rootFolders, children, screen, Title, deleteButtonsVisible } = props
-    // const { Title } = props.route.params
 
     const blankRootFolder = {
         Type: 'rootFolder',
@@ -56,9 +55,8 @@ const BigAddButton = (props) => {
         if (newRootFolder.Title == ''){
             Alert.alert("Title of new folder is blank")
         } else {
-            console.log("New root folder is ", newRootFolder)
             props.dispatchAddRootFolderVertex(newRootFolder)
-            console.log("Root Folders ", rootFolders)
+            console.log("@BigAddButton -- Root Folders are", rootFolders)
             setNewRootFolder(blankRootFolder)
         }
     }
@@ -200,9 +198,10 @@ const BigAddButton = (props) => {
                                 <Text style={styles.plusSign}>+</Text>
                         </View>
                     </TouchableOpacity>
-                : <TouchableOpacity>
+                : <TouchableOpacity
+                     >
                     <View style={styles.doneButton}>
-                        <Text>Done</Text>
+                        <Text style={styles.doneButtonText}>Done</Text>
                     </View>
                 </TouchableOpacity>
             }
@@ -226,7 +225,12 @@ const styles = StyleSheet.create({
 
     },
     doneButton: {
+        backgroundColor: '#a84832'
+    },
+    doneButtonText: {
         fontSize: 30,
+        color: '#fff',
+        padding: 5
     },
     addTaskOrFolderButtons: {        
     },

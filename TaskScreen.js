@@ -24,15 +24,6 @@ const TaskScreen = (props) => {
     const { Title, Children } = props.route.params
     const { navigation, children } = props
 
-    // const getRelevantChildrenArray = (nameOfFolder) => {
-
-    //     var relevantChildObject = children.find((element) => element.Title == nameOfFolder )
-    //     var relevantChildren = relevantChildObject.Children
-
-    //     return relevantChildren
-
-    // }
-
     const blankTask = {
         Type: 'Task',
         Parent: Title,
@@ -54,9 +45,9 @@ const TaskScreen = (props) => {
         if (newTaskVertex.Title == "" || newTaskVertex.Title == undefined) {
             Alert.alert("Title is blank")
         } else {
-        console.log("New Title is ", taskTitle)
-        console.log("New Note is", taskNote)
-        console.log("New Task is ", newTaskVertex)
+        console.log("@TaskScreen New Title is ", taskTitle)
+        console.log("@TaskScreen New Note is", taskNote)
+        console.log("@TaskScreen New Task is ", newTaskVertex)
         props.dispatchAddTaskVertex(newTaskVertex)
 
         }
@@ -82,7 +73,6 @@ const TaskScreen = (props) => {
                                 <Text style={styles.folderText}>{task.Title}</Text>
                                 </View>
                             </TouchableOpacity>
-                            <Text>Number of Children is {Children.length}</Text>
                         </View>
                     )) : 
                     <View>

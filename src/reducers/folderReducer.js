@@ -1,6 +1,9 @@
+import { State } from 'react-native-gesture-handler'
 import { ADD_ROOT_FOLDER, ADD_TASK_VERTEX } from 'C:/Users/Hodeem/Documents/Mobile and Web Development Projects/react-native/Membah/actions.js'
-import { ADD_SUB_FOLDER, DELETE_ITEM } from 'C:/Users/Hodeem/Documents/Mobile and Web Development Projects/react-native/Membah/actions.js'
+import { ADD_SUB_FOLDER, DELETE_ITEM, TOGGLE_DELETE } from 'C:/Users/Hodeem/Documents/Mobile and Web Development Projects/react-native/Membah/actions.js'
 import { ModifiedGraph }  from 'C:/Users/Hodeem/Documents/Mobile and Web Development Projects/react-native/Membah/Graph.js'
+// import update from 'immutability-helper'
+import _ from 'lodash'
 
 var vertices = [
     {Type: 'Root', Title: 'Root'},
@@ -36,7 +39,8 @@ for (var i = 0; i < vertices.length; i++) {
 var rootFolderVertex = initialGraph.findParentVertex('Root')
 var rootFolderVertices = initialGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
 
-initialState = {
+const initialState = {
+    delButtonVisible : false,
     rootFolders : rootFolderVertices,
     childrenOfRootAndSubFolders : []
 }
@@ -51,9 +55,13 @@ export const updateStateReducer = (state = initialState, action) => {
    
             initialGraph.addFolderVertex(action.folder)
             initialGraph.addEdge(rootFolderVertex,action.folder)
-            var newRootFolderVertices = initialGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
-            var newState = initialState
+            const newGraph = _.cloneDeep(initialGraph)
+            var newRootFolderVertices = newGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
+            const newState = _.cloneDeep(state)
             newState.rootFolders = newRootFolderVertices
+
+            // console.log("@folderReducer New state is ", newState)
+            // console.log("@folderReducer Shallow equality check ", newState === initialState)
 
             return newState 
         }   
@@ -63,7 +71,7 @@ export const updateStateReducer = (state = initialState, action) => {
             initialGraph.addTaskVertex(action.task)
             initialGraph.addEdgeWithoutDirectParentReference(action.task)
             var subs = initialGraph.returnVerticesWithChildren()
-            newState = initialState
+            const newState = {...state}
             newState.childrenOfRootAndSubFolders = subs
 
             return newState
@@ -74,7 +82,7 @@ export const updateStateReducer = (state = initialState, action) => {
             initialGraph.addFolderVertex(action.folder)
             initialGraph.addEdgeWithoutDirectParentReference(action.folder)
             subs = initialGraph.returnVerticesWithChildren()
-            newState = initialState
+            const newState = {...state}
             newState.childrenOfRootAndSubFolders = subs
 
             return newState
@@ -83,10 +91,24 @@ export const updateStateReducer = (state = initialState, action) => {
         case DELETE_ITEM: {
 
             initialGraph.deleteFolderVertex(action.item)
-            newRootFolderVertices = initialGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
-            subs = initialGraph.returnVerticesWithChildren()
-            newState = initialState
-            newState.childrenOfRootAndSubFolders = subs
+            var newRootFolderVertices = initialGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
+            var newSubs = initialGraph.returnVerticesWithChildren()
+            state = {
+                delButtonVisible : true,
+                rootFolders : newRootFolderVertices,
+                childrenOfRootAndSubFolders : newSubs
+            }
+
+            return state
+        }
+
+        case TOGGLE_DELETE: {
+
+            var newState = {
+                delButtonVisible : !state.delButtonVisible,
+                rootFolders : rootFolderVertices,
+                childrenOfRootAndSubFolders : subs
+            }
 
             return newState
         }

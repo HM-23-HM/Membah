@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Text, View, ScrollView, StyleSheet, TextInput, Pressable, Alert } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, TextInput, Pressable, Alert, Button } from 'react-native'
 import { connect } from 'react-redux'
-import { deleteItem } from './actions'
+import { deleteItem, toggleDeleteVisibility } from './actions'
 import uuid from 'react-native-uuid'
 
 import BigAddButton from './BigAddButton'
-
 
 const blankRootFolder = {
     Type: 'rootFolder',
@@ -16,33 +15,36 @@ const blankRootFolder = {
 const mapStateToProps = (state) => ({
     rootFolders: state.updateStateReducer.rootFolders,
     children: state.updateStateReducer.childrenOfRootAndSubFolders,
+    delButtonVis: state.updateStateReducer.delButtonVisible
 })
 
 const mapDispatchToProps = {
     dispatchDeleteItem: (item) => deleteItem(item),
-    
+    dispatchDelButtonVis: () => toggleDeleteVisibility()
 }
 
+const eventFromNow = {
+    summary: 'Poc Dev From Now',
+    time: 480,
+};
 
 const HomeScreen = (props) => {
 
-
-    const [deleteButtonsAreVisible, changeDeleteButtonVisibility] = useState(false)
-
     var realDeleteButtonVisibility = !deleteButtonsAreVisible
 
-    const { rootFolders, children } = props
+    const { rootFolders, children, delButtonVis } = props
+
+    const [deleteButtonsAreVisible, changeDeleteButtonVisibility] = useState(delButtonVis)
+
 
     const toggleDeleteButtonVisibility = () => {
-        changeDeleteButtonVisibility(!deleteButtonsAreVisible)
+        props.dispatchDelButtonVis()
+        changeDeleteButtonVisibility(delButtonVis => !delButtonVis)
         realDeleteButtonVisibility = !deleteButtonsAreVisible
-        console.log("real visibility ", realDeleteButtonVisibility)
     }
 
     const deleteItemNow = (item) => {
-        console.log("Item to be deleted is ", item)
         props.dispatchDeleteItem(item)
-        console.log("Item should be deleted")
     }
 
 
@@ -56,7 +58,6 @@ const HomeScreen = (props) => {
                         >
                             <Pressable 
                                 onLongPress={()=> toggleDeleteButtonVisibility()}
-                                // onPressOut={() => checkVisibilityOfDeleteButtons()}
                                 delayLongPress={3000}
                                 onPress={() => {
                                     if(!deleteButtonsAreVisible){
@@ -81,11 +82,11 @@ const HomeScreen = (props) => {
                             }       
                         </View>
                     ))}
-                </ScrollView>
-                
+                </ScrollView>               
                 <BigAddButton 
                     screen="HomeScreen"
                     deleteButtonsVisible={realDeleteButtonVisibility}
+                    
                 />
                 
             </View>

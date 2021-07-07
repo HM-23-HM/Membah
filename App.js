@@ -13,7 +13,8 @@ import DetailScreen from './Details'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 const Stack = createStackNavigator()
 
