@@ -22,10 +22,8 @@ class Graph {
 
             if (values != undefined){
             
-                // console.log("This is values ", values)
 
                 for (var j of values){
-                    // console.log("This is J ", j)
                     arrayOfValues.push(j)
                 }
             
@@ -98,6 +96,7 @@ export class ModifiedGraph extends Graph {
     constructor(numVertices, vertices){
         super(numVertices)
         this.vertices = vertices
+        
     }
 
     addFolderVertex(newFolderObject){
@@ -146,19 +145,18 @@ export class ModifiedGraph extends Graph {
 
     findParentVertex(titleOfParent){
 
-        var parentVertex = this.vertices.find((element) => {
+        let parentVertex = this.vertices.find((element) => {
             return element.Title == titleOfParent
         })
     
-        
         return parentVertex
     
     }
 
     addEdgeWithoutDirectParentReference(childVertexToAdd){
-        var titleOfParentVertex = childVertexToAdd.Parent
+        let titleOfParentVertex = childVertexToAdd.Parent
 
-        var parentVertex = this.findParentVertex(titleOfParentVertex)
+        let parentVertex = this.findParentVertex(titleOfParentVertex)
 
         if (parentVertex != undefined){
 
@@ -169,7 +167,11 @@ export class ModifiedGraph extends Graph {
     }
 
     getChildrenVerticesOfSelectedVertex(parentVertex) {
-        var ChildrenVertices = this.AdjList.get(parentVertex)
+
+        // console.log("@getChildren 3 : Testing ", this.AdjList.get(parentVertex))
+        // console.log("@getChildren 4 : Testing ", this.AdjList.get(this.findParentVertex('Root')))
+        // console.log("@getChildren 5 : Roots are equal ", parentVertex === this.findParentVertex('Root'))
+        let ChildrenVertices = this.AdjList.get(parentVertex)
         return ChildrenVertices
     }
 
@@ -204,7 +206,7 @@ export class ModifiedGraph extends Graph {
 
     }
 
-    returnVerticesWithChildren = () => {
+    returnVerticesWithChildren () {
         var names = this.getNamesOfParentVerticesExceptRoot()
       
         var arrayOfArraysOfValues = this.getAllChildrenVerticesInGraphExceptForRoot()
@@ -225,15 +227,25 @@ export class ModifiedGraph extends Graph {
     }
     
     removeEdge(childVertex){
-        var parentVertex = this.findParentVertex(childVertex.Parent)
-        var childrenVertices = this.getChildrenVerticesOfSelectedVertex(parentVertex)
-        var newChildrenVertices = childrenVertices.filter((element) => element != childVertex)
+
+        let parentVertex = this.findParentVertex(childVertex.Parent)
+        console.log("@Graph: Parent vertex ", parentVertex)
+
+        let childrenVertices = this.getChildrenVerticesOfSelectedVertex(parentVertex)
+        console.log("@Graph: Children Vertices ", childrenVertices)
+
+        let newChildrenVertices = childrenVertices.filter((element) => element != childVertex)
         this.AdjList.set(parentVertex,newChildrenVertices)
     }
 
     deleteFolderVertex(folderVertex){
         this.removeVertex(folderVertex)
         this.removeEdge(folderVertex)
+    }
+
+    checkIfParentIsRoot(childVertex, rootVertex){
+        let parentVertex = this.findParentVertex(childVertex.Parent)
+        console.log("Testing : ", parentVertex === rootVertex)
     }
 }
 

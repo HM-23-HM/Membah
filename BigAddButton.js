@@ -8,6 +8,7 @@ import { addRootFolderVertex, addTaskVertex, addSubFolderVertex } from './action
 const mapStateToProps = (state) => ({
     rootFolders: state.updateStateReducer.rootFolders,
     children: state.updateStateReducer.childrenOfRootAndSubFolders,
+    state_delButtonVis: state.updateStateReducer.deleteButtonsVisible
 })
 
 const mapDispatchToProps = {
@@ -30,7 +31,7 @@ const BigAddButton = (props) => {
     const [TaskInputVisibility, changeTaskInputVisibility] = useState(false)
 
 
-    const { rootFolders, children, screen, Title, deleteButtonsVisible } = props
+    const { rootFolders, children, screen, Title, deleteButtonsVisible, state_delButtonVis } = props
 
     const blankRootFolder = {
         Type: 'rootFolder',
@@ -56,7 +57,6 @@ const BigAddButton = (props) => {
             Alert.alert("Title of new folder is blank")
         } else {
             props.dispatchAddRootFolderVertex(newRootFolder)
-            console.log("@BigAddButton -- Root Folders are", rootFolders)
             setNewRootFolder(blankRootFolder)
         }
     }
@@ -177,34 +177,39 @@ const BigAddButton = (props) => {
                     </View> 
                 }
                 
-                { deleteButtonsVisible ? 
+                { !state_delButtonVis &&
+                    <View> 
                               
-                    <TouchableOpacity onPress={() => {
-                            if (!FolderInputVisibility && !TaskInputVisibility){
-                            toggleVisibilityOfFolderTask()}
-                            if (FolderInputVisibility){
-                                if (screen == 'HomeScreen'){
-                                addRootFolderVertexNow()
-                                } else {
-                                    addSubFolderVertexNow()
+                        <TouchableOpacity onPress={() => {
+                                if (!FolderInputVisibility && !TaskInputVisibility){
+                                toggleVisibilityOfFolderTask()}
+                                if (FolderInputVisibility){
+                                    if (screen == 'HomeScreen'){
+                                    addRootFolderVertexNow()
+                                    } else {
+                                        addSubFolderVertexNow()
+                                    }
                                 }
-                            }
-                            if (TaskInputVisibility){
-                                addTaskNow()
-                            }                        
+                                if (TaskInputVisibility){
+                                    addTaskNow()
+                                }                        
 
-                        }}>
-                        <View style={[styles.addButton, (FolderInputVisibility || TaskInputVisibility) && styles.greenButton,]}>
-                                <Text style={styles.plusSign}>+</Text>
-                        </View>
-                    </TouchableOpacity>
-                : <TouchableOpacity
-                     >
-                    <View style={styles.doneButton}>
-                        <Text style={styles.doneButtonText}>Done</Text>
+                            }}>
+                            <View style={[styles.addButton, (FolderInputVisibility || TaskInputVisibility) && styles.greenButton,]}>
+                                    <Text style={styles.plusSign}>+</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View> }
+                { state_delButtonVis &&
+                    <View>
+                        <TouchableOpacity
+                            >
+                            <View style={styles.doneButton}>
+                                <Text style={styles.doneButtonText}>Done</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                </TouchableOpacity>
-            }
+                }
             </View>
         </View>
     )
