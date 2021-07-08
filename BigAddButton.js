@@ -3,7 +3,13 @@ import { TouchableOpacity, Text, StyleSheet, View, TextInput, Alert } from 'reac
 import { connect } from 'react-redux'
 import { addRootFolderVertex, addTaskVertex, addSubFolderVertex } from './actions'
 
-
+import { 
+    addButtonColor, 
+    addButonTextColor, 
+    addButtonTextColor,
+    addButtonPressedColor,
+    folderAndTaskInputBackgroundColor,
+    folderAndTaskInputTextColor } from './src/colors'
 
 const mapStateToProps = (state) => ({
     rootFolders: state.updateStateReducer.rootFolders,
@@ -31,7 +37,7 @@ const BigAddButton = (props) => {
     const [TaskInputVisibility, changeTaskInputVisibility] = useState(false)
 
 
-    const { rootFolders, children, screen, Title, deleteButtonsVisible, state_delButtonVis } = props
+    const { rootFolders, children, screen, Title, state_delButtonVis } = props
 
     const blankRootFolder = {
         Type: 'rootFolder',
@@ -43,13 +49,15 @@ const BigAddButton = (props) => {
         Type: 'Task',
         Parent: Title,
         Title: '',
-        Note: ''
+        Note: '',
+        isComplete: false
     }
 
     const blankSubFolder = {
         Type: 'subFolder',
         Parent: Title,
-        Title: ''
+        Title: '',
+        isComplete: false
     }
 
     const addRootFolderVertexNow = () => {
@@ -58,16 +66,18 @@ const BigAddButton = (props) => {
         } else {
             props.dispatchAddRootFolderVertex(newRootFolder)
             setNewRootFolder(blankRootFolder)
+            changeFolderInputVisibility(false)
         }
     }
 
     const addSubFolderVertexNow = () => {
-        if (newSubFolder.Title == ''){
+        if (newSubFolder == undefined || newSubFolder.Title == '' || newSubFolder.Title == undefined){
             Alert.alert("Title of new folder is blank")
         } else {
             console.log("New sub folder is ", newSubFolder)
             props.dispatchAddSubFolderVertex(newSubFolder)
             setNewSubFolder(blankSubFolder)
+            changeFolderInputVisibility()
         }
     }
 
@@ -80,13 +90,13 @@ const BigAddButton = (props) => {
         }) 
         console.log("New Task Vertex is ", newTaskVertex)
 
-        if (newTaskVertex.Title == "" || newTaskVertex.Title == undefined) {
+        if (newTaskVertex == undefined || newTaskVertex.Title == "" || newTaskVertex.Title == undefined) {
             Alert.alert("Title is blank")
         } else {
         console.log("New Title is ", taskTitle)
         console.log("New Note is", taskNote)
-        console.log("New Task is ", newTaskVertex)
         props.dispatchAddTaskVertex(newTaskVertex)
+        changeTaskInputVisibility()
 
         }
     }
@@ -105,7 +115,6 @@ const BigAddButton = (props) => {
         changeTaskInputVisibility(!TaskInputVisibility)
         changeVisibility(!addFolderTaskVisibility)
     }
-
 
 
     return (
@@ -127,7 +136,8 @@ const BigAddButton = (props) => {
                                             setNewSubFolder({
                                                     Type: 'subFolder',
                                                     Parent: Title,
-                                                    Title: text  
+                                                    Title: text,
+                                                    isComplete: false  
                                                 })
                                         }    
                                     }
@@ -176,11 +186,8 @@ const BigAddButton = (props) => {
                         </TouchableOpacity>
                     </View> 
                 }
-                
-                { !state_delButtonVis &&
-                    <View> 
-                              
-                        <TouchableOpacity onPress={() => {
+                                              
+                    <TouchableOpacity onPress={() => {
                                 if (!FolderInputVisibility && !TaskInputVisibility){
                                 toggleVisibilityOfFolderTask()}
                                 if (FolderInputVisibility){
@@ -199,17 +206,8 @@ const BigAddButton = (props) => {
                                     <Text style={styles.plusSign}>+</Text>
                             </View>
                         </TouchableOpacity>
-                    </View> }
-                { state_delButtonVis &&
-                    <View>
-                        <TouchableOpacity
-                            >
-                            <View style={styles.doneButton}>
-                                <Text style={styles.doneButtonText}>Done</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                }
+                    
+
             </View>
         </View>
     )
@@ -224,10 +222,10 @@ const styles = StyleSheet.create({
         bottom: 10,
         flexDirection: 'row',
         flex: 1,
-        borderWidth: 1,
         zIndex: 1,
-        backgroundColor: '#fff'
-
+        width: '80%',
+        // borderWidth: 1,
+        height: 120
     },
     doneButton: {
         backgroundColor: '#a84832'
@@ -237,7 +235,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         padding: 5
     },
-    addTaskOrFolderButtons: {        
+    addTaskOrFolderButtons: {    
+        // borderWidth: 1,
+        width: '100%'    
     },
     addOptionsText: {
         alignSelf: 'center',
@@ -246,33 +246,45 @@ const styles = StyleSheet.create({
         padding: 5,
         borderRadius: 5
     },
+    addButtonContainer: {
+        borderWidth: 1
+    },
     addButton: {
         height: 100,
         width: 100,
-        alignSelf: 'flex-end',
+        position: 'absolute',
+        top: 8,
+        // bottom: 5,
+        right: 15,
+        // alignSelf: 'flex-end',
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth: 2,
         borderRadius: 50,
-        backgroundColor: '#f54b42',
-        margin: 16
+        backgroundColor: addButtonColor,
+        // margin: 16
     },
 
     plusSign: {
         fontWeight: 'bold',
         fontSize: 50,
-        color: '#fff'
+        color: addButtonTextColor,
     },
     addFolder: {
         justifyContent: 'center',
+        top: 35,
+        // alignSelf: 'center'
         
     },
     greenButton: {
-        backgroundColor: '#97f788'
+        backgroundColor: addButtonPressedColor
     },
     folderAndTaskInput: {
         fontSize: 16,
-        margin: 10
+        margin: 10,
+        padding: 8,
+        backgroundColor: folderAndTaskInputBackgroundColor,
+        borderRadius: 10,
+        color: folderAndTaskInputBackgroundColor
     },
     addNewTask: {
         margin: 20,

@@ -11,12 +11,12 @@ let vertices = [
     {Type: 'rootFolder', Parent: 'Root', Title: 'Property'},
     {Type: 'rootFolder', Parent: 'Root', Title: 'Business'},
 
-    {Type: 'subFolder', Parent: 'Vehicle', Title: 'Maintenance'},
-    {Type: 'subFolder', Parent: 'Property', Title: 'Pool'},
+    {Type: 'subFolder', Parent: 'Vehicle', Title: 'Maintenance', isComplete: false},
+    {Type: 'subFolder', Parent: 'Property', Title: 'Pool', isComplete: false},
 
-    {Type: 'Task', Parent:'Vehicle', Title: 'Task1'},     
-    {Type: 'Task', Parent:'Property', Title: 'Task2'},     
-    {Type: 'Task', Parent:'Business', Title: 'Task3'},     
+    {Type: 'Task', Parent:'Vehicle', Title: 'Task1', isComplete: false},     
+    {Type: 'Task', Parent:'Property', Title: 'Task2', isComplete: false},     
+    {Type: 'Task', Parent:'Business', Title: 'Task3', isComplete: false},     
     
 ]
 
@@ -80,8 +80,10 @@ export const updateStateReducer = (state = initialState, action) => {
 
             initialGraph.addFolderVertex(action.folder)
             initialGraph.addEdgeWithoutDirectParentReference(action.folder)
+
             let subs = initialGraph.returnVerticesWithChildren()
             let newState = _.cloneDeep(state)
+
             newState.childrenOfRootAndSubFolders = subs
 
             return newState
