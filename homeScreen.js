@@ -5,6 +5,9 @@ import { deleteItem, toggleDeleteVisibility } from './actions'
 import uuid from 'react-native-uuid'
 
 import BigAddButton from './BigAddButton'
+import BigDoneButton from './BigDoneButton'
+
+import { background, menuBackground, menuBorder, menuTextColor } from './src/colors'
 
 const blankRootFolder = {
     Type: 'rootFolder',
@@ -39,7 +42,7 @@ const HomeScreen = (props) => {
 
     const toggleDeleteButtonVisibility = () => {
         props.dispatchDelButtonVis()
-        changeDeleteButtonVisibility(state_elButtonVis => !state_delButtonVis)
+        changeDeleteButtonVisibility(state_delButtonVis => !state_delButtonVis)
         console.log("@homeScreen : Visibility should now be after toggle ", state_delButtonVis)
         realDeleteButtonVisibility = !deleteButtonsAreVisible
     }
@@ -59,7 +62,7 @@ const HomeScreen = (props) => {
                         >
                             <Pressable 
                                 onLongPress={()=> toggleDeleteButtonVisibility()}
-                                delayLongPress={3000}
+                                delayLongPress={2000}
                                 onPress={() => {
                                     if(!deleteButtonsAreVisible){
                                 props.navigation.navigate('Tasks', {...children.find((element) => element.Title == folder.Title)})
@@ -84,11 +87,11 @@ const HomeScreen = (props) => {
                         </View>
                     ))}
                 </ScrollView>               
-                <BigAddButton 
+                {!state_delButtonVis && <BigAddButton 
                     screen="HomeScreen"
                     deleteButtonsVisible={realDeleteButtonVisibility}
-                    
-                />
+                />}
+                {state_delButtonVis && <BigDoneButton/>}
                 
             </View>
         ) 
@@ -100,7 +103,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: background,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -108,16 +111,17 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       height: 75,
-      width: 200,
+      width: 250,
       borderWidth: 2,
       borderRadius: 5,
-      backgroundColor: '#add8e6',
+      backgroundColor: menuBackground,
+      borderColor: menuBorder,
       margin: 20,
-    //   marginRight: 5
     },
   
     folderText: {
-      color: '#000',
+      color: menuTextColor,
+      fontSize: 20
     },
 
     folderContainer: {

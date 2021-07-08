@@ -160,17 +160,12 @@ export class ModifiedGraph extends Graph {
 
         if (parentVertex != undefined){
 
-            // console.log("Parent Vertex is ", ParentVertex)
-
             super.addEdge(parentVertex,childVertexToAdd)
         } 
     }
 
     getChildrenVerticesOfSelectedVertex(parentVertex) {
 
-        // console.log("@getChildren 3 : Testing ", this.AdjList.get(parentVertex))
-        // console.log("@getChildren 4 : Testing ", this.AdjList.get(this.findParentVertex('Root')))
-        // console.log("@getChildren 5 : Roots are equal ", parentVertex === this.findParentVertex('Root'))
         let ChildrenVertices = this.AdjList.get(parentVertex)
         return ChildrenVertices
     }
