@@ -22,8 +22,8 @@ let vertices = [
 
 var initialGraph = new ModifiedGraph(8,vertices)
 
-for (var i = 0; i < vertices.length; i++) {
-    var checkTypeOfVertex = vertices[i].Type
+for (let i = 0; i < vertices.length; i++) {
+    let checkTypeOfVertex = vertices[i].Type
     if (checkTypeOfVertex != 'Task') {
         initialGraph.addVertex(vertices[i]);
     } else {
@@ -31,7 +31,7 @@ for (var i = 0; i < vertices.length; i++) {
     }
 }
 
-for (var i = 0; i < vertices.length; i++) {
+for (let i = 0; i < vertices.length; i++) {
     initialGraph.addEdgeWithoutDirectParentReference(vertices[i]);
 }
 
@@ -55,13 +55,10 @@ export const updateStateReducer = (state = initialState, action) => {
             initialGraph.addFolderVertex(action.folder)
             initialGraph.addEdge(rootFolderVertex,action.folder)
 
-            let newGraph = _.cloneDeep(initialGraph)
             let newState = _.cloneDeep(state)
 
-            let newRootFolderVertices = newGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
+            let newRootFolderVertices = initialGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
             newState.rootFolders = newRootFolderVertices
-
-            // console.log("@ADD_ROOT_FOLDER : New State is ", newState)
 
             return newState 
         }   
@@ -72,7 +69,7 @@ export const updateStateReducer = (state = initialState, action) => {
             initialGraph.addEdgeWithoutDirectParentReference(action.task)
 
             let subs = initialGraph.returnVerticesWithChildren()
-            let newState = {...state}
+            let newState = _.cloneDeep(state)
 
             newState.childrenOfRootAndSubFolders = subs
 
@@ -84,7 +81,7 @@ export const updateStateReducer = (state = initialState, action) => {
             initialGraph.addFolderVertex(action.folder)
             initialGraph.addEdgeWithoutDirectParentReference(action.folder)
             let subs = initialGraph.returnVerticesWithChildren()
-            let newState = {...state}
+            let newState = _.cloneDeep(state)
             newState.childrenOfRootAndSubFolders = subs
 
             return newState
@@ -93,27 +90,13 @@ export const updateStateReducer = (state = initialState, action) => {
         case DELETE_ITEM: {
 
             let newState = _.cloneDeep(state)
-            let newGraph = _.cloneDeep(initialGraph)
+            
+            initialGraph.deleteFolderVertex(action.item)
 
-            let newRootFolderVertex = newGraph.findParentVertex('Root')
-
-            console.log("@DELETE_ITEM : New Graph is ", newGraph)
-            console.log('@DELETE_ITEM : Root Folder Vertex is ', newRootFolderVertex)
-            console.log('@DELETE_ITEM : Children Vertices before ', newGraph.getChildrenVerticesOfSelectedVertex(newRootFolderVertex))
-
-            // console.log("Action.item is ", action.item)
-
-            newGraph.checkIfParentIsRoot(action.item,newRootFolderVertex)
-            newGraph.deleteFolderVertex(action.item)
-
-            console.log('@DELETE_ITEM : Children Vertices after ', newGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex))
-
-            let newRootFolderVertices = newGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
-            let newSubs = newGraph.returnVerticesWithChildren()
+            let newRootFolderVertices = initialGraph.getChildrenVerticesOfSelectedVertex(rootFolderVertex)
+            let newSubs = initialGraph.returnVerticesWithChildren()
             newState.rootFolders = newRootFolderVertices
             newState.childrenOfRootAndSubFolders = newSubs
-
-            // console.log("@DELETE_ITEM : New state is ", newState)
 
             return newState
         }

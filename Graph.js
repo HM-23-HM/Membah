@@ -168,9 +168,9 @@ export class ModifiedGraph extends Graph {
 
     getChildrenVerticesOfSelectedVertex(parentVertex) {
 
-        console.log("@getChildren 3 : Testing ", this.AdjList.get(parentVertex))
-        console.log("@getChildren 4 : Testing ", this.AdjList.get(this.findParentVertex('Root')))
-        console.log("@getChildren 5 : Roots are equal ", parentVertex === this.findParentVertex('Root'))
+        // console.log("@getChildren 3 : Testing ", this.AdjList.get(parentVertex))
+        // console.log("@getChildren 4 : Testing ", this.AdjList.get(this.findParentVertex('Root')))
+        // console.log("@getChildren 5 : Roots are equal ", parentVertex === this.findParentVertex('Root'))
         let ChildrenVertices = this.AdjList.get(parentVertex)
         return ChildrenVertices
     }

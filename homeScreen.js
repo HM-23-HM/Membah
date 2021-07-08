@@ -15,7 +15,7 @@ const blankRootFolder = {
 const mapStateToProps = (state) => ({
     rootFolders: state.updateStateReducer.rootFolders,
     children: state.updateStateReducer.childrenOfRootAndSubFolders,
-    delButtonVis: state.updateStateReducer.delButtonVisible
+    state_delButtonVis: state.updateStateReducer.delButtonVisible
 })
 
 const mapDispatchToProps = {
@@ -32,14 +32,15 @@ const HomeScreen = (props) => {
 
     var realDeleteButtonVisibility = !deleteButtonsAreVisible
 
-    const { rootFolders, children, delButtonVis } = props
+    const { rootFolders, children, state_delButtonVis } = props
 
-    const [deleteButtonsAreVisible, changeDeleteButtonVisibility] = useState(delButtonVis)
+    const [deleteButtonsAreVisible, changeDeleteButtonVisibility] = useState(state_delButtonVis)
 
 
     const toggleDeleteButtonVisibility = () => {
         props.dispatchDelButtonVis()
-        changeDeleteButtonVisibility(delButtonVis => !delButtonVis)
+        changeDeleteButtonVisibility(state_elButtonVis => !state_delButtonVis)
+        console.log("@homeScreen : Visibility should now be after toggle ", state_delButtonVis)
         realDeleteButtonVisibility = !deleteButtonsAreVisible
     }
 
