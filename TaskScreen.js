@@ -20,6 +20,19 @@ import BigAddButton from "./BigAddButton";
 
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
+import { 
+  menuBackground,
+  menuBorder,
+  menuTextColor,
+  background,
+  sectionHeaderBackgroundColor, 
+  sectionHeaderBorderColor, 
+  sectionHeaderTextColor,
+  toggleCompleteButtonBackground,
+  toggleCompleteTextColor } from './src/colors'
+  
+
+
 const mapStateToProps = (state, ownProps) => {
     const { Title } = ownProps.route.params
     return {    
@@ -56,22 +69,22 @@ const TaskScreen = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text>{Title}</Text>
+        <Text style={styles.headerText}>{Title}</Text>
       </View>
-      <View style={styles.navigationContainer}>
+      <View style={styles.toggleCompleteContainer}>
         <Pressable 
-            style={styles.navigationButton} 
+            style={styles.toggleCompleteButton} 
             onPress={() => setAreTasksCompleted(!areTasksCompleted)}
             disabled={!areTasksCompleted}
         >
-            <Text>Not Completed</Text>
+            <Text style={styles.toggleCompleteText}>Not Completed</Text>
         </Pressable>
         <Pressable 
-            style={styles.navigationButton}
+            style={styles.toggleCompleteButton}
             onPress={() => setAreTasksCompleted(!areTasksCompleted)}
             disabled={areTasksCompleted}
         >
-            <Text>Completed</Text>
+            <Text style={styles.toggleCompleteText}>Completed</Text>
         </Pressable>
       </View>
       <ScrollView>
@@ -150,7 +163,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(TaskScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: background,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -161,7 +174,8 @@ const styles = StyleSheet.create({
     width: 250,
     borderWidth: 2,
     borderRadius: 5,
-    backgroundColor: "#add8e6",
+    backgroundColor: menuBackground,
+    borderColor: menuBorder,
     margin: 20,
   },
 
@@ -172,12 +186,14 @@ const styles = StyleSheet.create({
     width: 250,
     borderWidth: 2,
     borderRadius: 5,
-    backgroundColor: "#facfed",
+    borderColor: "#ffe5dc",
+    backgroundColor: "#ffeee7",
     margin: 20,
   },
 
   folderText: {
-    color: "#000",
+    color: menuTextColor,
+    fontSize: 16,
   },
 
   header: {
@@ -186,7 +202,12 @@ const styles = StyleSheet.create({
     height: 75,
     width: "100%",
     borderWidth: 2,
-    backgroundColor: "#FFE5B4",
+    borderColor: sectionHeaderBorderColor,
+    backgroundColor: sectionHeaderBackgroundColor,
+  },
+  headerText: {
+    color: sectionHeaderTextColor,
+    fontSize: 40
   },
   checkbox: {
       position: 'absolute',
@@ -211,17 +232,24 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
     },
-    navigationContainer: {
+    toggleCompleteContainer: {
         flexDirection: 'row',
         borderWidth: 1,
+        borderColor: sectionHeaderBorderColor,
         marginBottom: 10,
         width: '100%',
         justifyContent: 'space-evenly'
     },
-    navigationButton: {
+    toggleCompleteButton: {
         padding: 10,
         borderWidth: 1,
+        borderColor: sectionHeaderBorderColor,
+        backgroundColor: toggleCompleteButtonBackground,
         width: '50%',
         alignItems: 'center'
+    },
+    toggleCompleteText: {
+      color: toggleCompleteTextColor,
+      fontSize: 25
     }
 });
