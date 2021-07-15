@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, Text, StyleSheet, View, TextInput, Alert } from 'react-native'
+import { Pressable, Text, StyleSheet, View, TextInput, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { addRootFolderVertex, addTaskVertex, addSubFolderVertex } from './actions'
 
@@ -33,8 +33,8 @@ const BigAddButton = (props) => {
     const [newTaskVertex, setNewTaskVertex] = useState(blankTask)
 
     const [addFolderTaskVisibility, changeVisibility] = useState(false)
-    const [FolderInputVisibility, changeFolderInputVisibility] = useState(false)
-    const [TaskInputVisibility, changeTaskInputVisibility] = useState(false)
+    const [folderInputsAreVisible, changeFolderInputVisibility] = useState(false)
+    const [tasksInputsAreVisible, changeTaskInputVisibility] = useState(false)
 
 
     const { rootFolders, children, screen, Title, state_delButtonVis } = props
@@ -102,17 +102,18 @@ const BigAddButton = (props) => {
     }
 
     const toggleVisibilityOfFolderTask = () => {
+        console.log("Working")
         changeVisibility(!addFolderTaskVisibility)
 
     }
 
     const toggleVisibilityOfFolderInputs = () => {
-        changeFolderInputVisibility(!FolderInputVisibility)
+        changeFolderInputVisibility(!folderInputsAreVisible)
         changeVisibility(!addFolderTaskVisibility)
     }
 
     const toggleVisibilityOfTaskInputs = () => {
-        changeTaskInputVisibility(!TaskInputVisibility)
+        changeTaskInputVisibility(!tasksInputsAreVisible)
         changeVisibility(!addFolderTaskVisibility)
     }
 
@@ -120,7 +121,7 @@ const BigAddButton = (props) => {
     return (
         <View style={styles.container}>
             <View>
-                { FolderInputVisibility && 
+                { folderInputsAreVisible && 
                         <View style={styles.addFolder}>
                             <TextInput
                                     style={styles.folderAndTaskInput}
@@ -147,7 +148,7 @@ const BigAddButton = (props) => {
                 }
             </View>
             <View>
-            { TaskInputVisibility && 
+            { tasksInputsAreVisible && 
                     <View >
                         <TextInput
                             // value={newTitle}
@@ -171,42 +172,44 @@ const BigAddButton = (props) => {
                     <View> 
                         { screen != "HomeScreen" && 
                             <View>
-                                <TouchableOpacity 
+                                <Pressable 
                                 style={styles.addOptionsText}
                                 onPress={ () => toggleVisibilityOfTaskInputs()}>
                                         <Text>Add Task</Text>
-                                </TouchableOpacity> 
+                                </Pressable> 
                             </View>
                         }
                     
-                        <TouchableOpacity 
+                        <Pressable 
                             style={styles.addOptionsText}
                             onPress = {() => toggleVisibilityOfFolderInputs()  }>
                                 <Text>Add Folder</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View> 
                 }
-                                              
-                    <TouchableOpacity onPress={() => {
-                                if (!FolderInputVisibility && !TaskInputVisibility){
+                <View>
+                    <Pressable onPress={
+                        () => {
+                                if (!folderInputsAreVisible && !tasksInputsAreVisible){
                                 toggleVisibilityOfFolderTask()}
-                                if (FolderInputVisibility){
+                                if (folderInputsAreVisible){
                                     if (screen == 'HomeScreen'){
                                     addRootFolderVertexNow()
                                     } else {
                                         addSubFolderVertexNow()
                                     }
                                 }
-                                if (TaskInputVisibility){
+                                if (tasksInputsAreVisible){
                                     addTaskNow()
                                 }                        
 
-                            }}>
-                            <View style={[styles.addButton, (FolderInputVisibility || TaskInputVisibility) && styles.greenButton,]}>
+                            }
+                            }>
+                            <View style={[styles.addButton, (folderInputsAreVisible || tasksInputsAreVisible) && styles.greenButton,]}>
                                     <Text style={styles.plusSign}>+</Text>
                             </View>
-                        </TouchableOpacity>
-                    
+                    </Pressable>
+                </View>
 
             </View>
         </View>

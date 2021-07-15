@@ -9,6 +9,8 @@ npm-debug.*
 *.orig.*
 web-build/
 temp_backup/
-
+not_for_upload/
 # macOS
 .DS_Store
+
+test.js
